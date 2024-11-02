@@ -25,7 +25,7 @@ pipeline {
         
         stage("push") {
             steps {
-                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser"])]) {
+                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser")]) {
                     sh "echo ${dockerHubPass} | docker login -u ${dockerHubUser} --password-stdin"
                     sh "docker tag node-app-test-new:latest ${dockerHubUser}/node-app-test-new:latest"
                     sh "docker push ${dockerHubUser}/node-app-test-new:latest"
