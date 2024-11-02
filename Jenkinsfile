@@ -25,11 +25,10 @@ pipeline {
         
         stage("push") {
             steps {
-                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser ")]) {
-                    // Use echo to pass the password securely
-                    sh "echo ${dockerHubPass} | docker login -u ${dockerHubUser } --password-stdin"
-                    sh "docker tag node-app-test-new:latest ${dockerHubUser }/node-app-test-new:latest"
-                    sh "docker push ${dockerHubUser }/node-app-test-new:latest"
+                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser"])]) {
+                    sh "echo ${dockerHubPass} | docker login -u ${dockerHubUser} --password-stdin"
+                    sh "docker tag node-app-test-new:latest ${dockerHubUser}/node-app-test-new:latest"
+                    sh "docker push ${dockerHubUser}/node-app-test-new:latest"
                     echo 'image pushed'
                 }
             }
