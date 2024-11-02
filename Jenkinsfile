@@ -1,5 +1,5 @@
 pipeline {
-    agent { label "jenkins-server" }
+    agent any
     
     stages {
         
