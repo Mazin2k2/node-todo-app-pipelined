@@ -25,19 +25,12 @@ pipeline {
         
         stage("push") {
             steps {
-                script {
-                    // Check if dockerHub credentials exist
-                    def dockerHubCreds = credentials('dockerHub')
-                    if (dockerHubCreds) {
-                        withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser ")]) {
-                            sh "docker login -u ${env.dockerHubUser } -p ${env.dockerHubPass}"
-                            sh "docker tag node-app-test-new:latest ${env.dockerHubUser }/node-app-test-new:latest"
-                            sh "docker push ${env.dockerHubUser }/node-app-test-new:latest"
-                            echo 'image pushed'
-                        }
-                    } else {
-                        error("DockerHub credentials not found. Please add them.")
-                    }
+                withCredentials([usernamePassword(credentialsId: "dockerHub", passwordVariable: "dockerHubPass", usernameVariable: "dockerHubUser ")]) {
+                    // Use echo to pass the password securely
+                    sh "echo ${dockerHubPass} | docker login -u ${dockerHubUser } --password-stdin"
+                    sh "docker tag node-app-test-new:latest ${dockerHubUser }/node-app-test-new:latest"
+                    sh "docker push ${dockerHubUser }/node-app-test-new:latest"
+                    echo 'image pushed'
                 }
             }
         }
